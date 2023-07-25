@@ -6,8 +6,10 @@ import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import { Link } from 'react-router-dom';
 
-const Landing = () => {
+const Search = () => {
+    
     const pages = ['Home', 'Search', 'Review', 'MyPage'];
+
     return (
         <Grid container spacing={5}>
             <AppBar position="static" sx={{height: '100px'}}>
@@ -16,7 +18,7 @@ const Landing = () => {
                     {pages.map((page) => (
                     <Typography
                         component={Link}
-                        to={page === 'Home' ? `/` : `/${page.toLowerCase()}`}
+                        to={page === 'Home' ? `/` : `/${page.toLowerCase()}`} 
                         variant="button text"
                         sx={{
                         flexGrow: 1,
@@ -32,7 +34,7 @@ const Landing = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-        </Grid>    
+        </Grid>
     )
 }
-export default Landing;
+export default Search;

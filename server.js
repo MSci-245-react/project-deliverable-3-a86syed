@@ -17,13 +17,12 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
-
 app.post('/api/loadUserSettings', (req, res) => {
 
 	let connection = mysql.createConnection(config);
 	let userID = req.body.userID;
 
-	let sql = `SELECT mode FROM user WHERE userID = ?`;
+	let sql = `SELECT mode FROM a86syed.User WHERE userID = ?`;
 	console.log(sql);
 	let data = [userID];
 	console.log(data);
@@ -40,7 +39,37 @@ app.post('/api/loadUserSettings', (req, res) => {
 	connection.end();
 });
 
+app.post('/api/getMovies', (req, res) => {
+	let sql = "SELECT * FROM movies";
+	let connection = mysql.createConnection(config); 
 
+	connection.query(sql, (error, results) => { 
+		if (error) { 
+			return console.error(error.message);
+		}
+		res.send({express : JSON.stringify(results)});
+	});
+	connection.end();
+});
+
+app.post('/api/addReview', (req, res) => {
+	let userID = req.body.userID;
+    let movieID = req.body.movieID;
+    let reviewTitle = req.body.reviewTitle;
+    let reviewContent = req.body.reviewContent;
+    let reviewScore = req.body.reviewScore;
+
+    let sql = `INSERT INTO a86syed.Review(userID, movieID, reviewTitle, reviewContent, reviewScore) VALUES (${userID}, ${movieID}, "${reviewTitle}", "${reviewContent}", ${reviewScore});`
+    let connection = mysql.createConnection(config);
+
+    connection.query(sql, (error, results) => {
+        if (error) {
+            res.send(error);
+        }
+        res.send({express: JSON.stringify(results)});
+    });
+    connection.end();
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`)); //for the dev version
 //app.listen(port, '172.31.31.77'); //for the deployed version, specify the IP address of the server
