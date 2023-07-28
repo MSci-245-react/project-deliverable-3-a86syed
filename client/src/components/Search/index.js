@@ -6,6 +6,13 @@ import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import { Link } from 'react-router-dom';
 import SearchComponent from './SearchComponent';
+import Button from '@mui/material/Button';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table'
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
 
 const Search = () => {
     
@@ -14,6 +21,7 @@ const Search = () => {
     const [actorSearchTerm, setActorSearchTerm] = React.useState('');
     const [directorSearchTerm, setDirectorSearchTerm] = React.useState('');
     const [searchResults, setSearchResults] = React.useState([]);
+    const [renderSearchResults, setRenderSearchResults] = React.useState(false);
 
     const serverURL = "";
     
@@ -27,6 +35,7 @@ const Search = () => {
             var parsed = JSON.parse(res.express);
             setSearchResults(parsed);
         });
+        setRenderSearchResults(true);
     }
     
     const callApiFindMovie = async () => {
@@ -47,6 +56,21 @@ const Search = () => {
         if (response.status !== 200) throw Error(body.message);
         return body;
     }
+
+    const updateMovieSearchTerm = (event) => {
+        setMovieSearchTerm(event.target.value);
+        setRenderSearchResults(false);
+    };
+
+    const updateActorSearchTerm = (event) => {
+        setActorSearchTerm(event.target.value);
+        setRenderSearchResults(false);
+    };
+
+    const updateDirectorSearchTerm = (event) => {
+        setDirectorSearchTerm(event.target.value);
+        setRenderSearchResults(false);
+    };
     
     return (
         <Grid container spacing={5}>
@@ -72,32 +96,61 @@ const Search = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Grid item xs={12} align="center">
-                <Typography variant="h3" component="div">
-                    Find a movie
-                </Typography>
-            </Grid> 
-            <Grid item xs={4} align="center">
+            <Grid item xs={3} align="center">
                 <SearchComponent 
                     label="Search by movie"
-                    onSearch={setMovieSearchTerm}
+                    searchTerm={movieSearchTerm}
+                    onSearch={updateMovieSearchTerm}
                 />
             </Grid>
-            <Grid item xs={4} align="center">
+            <Grid item xs={3} align="center">
                 <SearchComponent
                     label="Search by actor"
-                    onSearch={setActorSearchTerm}
+                    searchTerm={actorSearchTerm}
+                    onSearch={updateActorSearchTerm}
                 />
             </Grid>
-            <Grid item xs={4} align="center">
+            <Grid item xs={3} align="center">
                 <SearchComponent 
                     label="Search by director"
-                    onSearch={setDirectorSearchTerm}
+                    searchTerm={directorSearchTerm}
+                    onSearch={updateDirectorSearchTerm}
                 />
             </Grid>
-            <Grid item xs={12} align="left">
+            <Grid item xs={3} align = "center">
+                <Button 
+                    variant="contained"
+                    onClick={handleSearch}
+                >
+                    Submit
+                </Button>
+            </Grid>
 
-            </Grid> 
+            {renderSearchResults &&
+                <Grid item xs={12} align="center">
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                <TableCell>Movie Name</TableCell>
+                                <TableCell>Director Name</TableCell>
+                                <TableCell>Review Content</TableCell>
+                                <TableCell>Review Score</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {searchResults.map((result) => (
+                                    <TableRow>
+                                        <TableCell>{result.movie_name}</TableCell>
+                                        <TableCell>{result.director_name}</TableCell>
+                                        <TableCell>{result.review_content}</TableCell>
+                                    </TableRow>
+                                ))};
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid> 
+            }
         </Grid>
     )
 }
