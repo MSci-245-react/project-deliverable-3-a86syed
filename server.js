@@ -77,7 +77,7 @@ app.post('/api/findMovie', (req, res) => {
 	let actorSearchTerm = req.body.actorSearchTerm;
 	let directorSearchTerm = req.body.actorSearchTerm;
 
-	let sql = `SELECT DISTINCT m.name AS movie_name, CONCAT(d.first_name, \' \', d.last_name) AS director_name, r.reviewContent AS review_content
+	let sql = `SELECT DISTINCT m.name AS movie_name, CONCAT(d.first_name, \' \', d.last_name) AS director_name, r.reviewContent AS review_content, r.reviewScore AS review_score
 				FROM movies AS m
 				INNER JOIN movies_directors AS md ON m.id = md.movie_id
 				INNER JOIN directors AS d ON md.director_id = d.id

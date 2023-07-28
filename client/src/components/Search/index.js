@@ -24,10 +24,6 @@ const Search = () => {
     const [renderSearchResults, setRenderSearchResults] = React.useState(false);
 
     const serverURL = "";
-    
-    React.useEffect(() => {
-        handleSearch();
-    }, [movieSearchTerm, actorSearchTerm, directorSearchTerm]);
 
     const handleSearch = () => {
         callApiFindMovie()
@@ -35,7 +31,12 @@ const Search = () => {
             var parsed = JSON.parse(res.express);
             setSearchResults(parsed);
         });
-        setRenderSearchResults(true);
+        if (!movieSearchTerm && !actorSearchTerm && !directorSearchTerm) {
+            setRenderSearchResults(false);
+        } else { 
+            setRenderSearchResults(true);
+        }
+        
     }
     
     const callApiFindMovie = async () => {
@@ -59,17 +60,14 @@ const Search = () => {
 
     const updateMovieSearchTerm = (event) => {
         setMovieSearchTerm(event.target.value);
-        setRenderSearchResults(false);
     };
 
     const updateActorSearchTerm = (event) => {
         setActorSearchTerm(event.target.value);
-        setRenderSearchResults(false);
     };
 
     const updateDirectorSearchTerm = (event) => {
         setDirectorSearchTerm(event.target.value);
-        setRenderSearchResults(false);
     };
     
     return (
@@ -127,7 +125,7 @@ const Search = () => {
             </Grid>
 
             {renderSearchResults &&
-                <Grid item xs={12} align="center">
+                (<Grid item xs={12} align="center">
                     <TableContainer>
                         <Table>
                             <TableHead>
@@ -144,12 +142,13 @@ const Search = () => {
                                         <TableCell>{result.movie_name}</TableCell>
                                         <TableCell>{result.director_name}</TableCell>
                                         <TableCell>{result.review_content}</TableCell>
+                                        <TableCell>{result.review_score}</TableCell>
                                     </TableRow>
                                 ))};
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </Grid> 
+                </Grid>) 
             }
         </Grid>
     )
