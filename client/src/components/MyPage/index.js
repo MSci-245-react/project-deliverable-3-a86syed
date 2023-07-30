@@ -71,10 +71,12 @@ const MyPage = () => {
 
     const onChangeGenreFilter = (event) => { 
         setGenreFilter(event.target.value);
+        setShowList(false);
     }
 
     const onChangeDirectorFilter = (event) => { 
         setDirectorFilter(event.target.value);
+        setShowList(false);
     }
 
     const callApiAddEntry = async () => {
@@ -105,6 +107,8 @@ const MyPage = () => {
             });
         } else { 
             setShowList(false);
+            setDirectorFilter('');
+            setGenreFilter('');
         }
     }
     
@@ -132,6 +136,9 @@ const MyPage = () => {
         } else {
             setMovieError(false);
             callApiAddEntry();
+            setMovie('');
+            setDirector('');
+            setGenre('');
         }
     }
 

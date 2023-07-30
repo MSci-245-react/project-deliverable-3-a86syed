@@ -119,7 +119,7 @@ const Landing = () => {
                             paddingLeft: '20px',
                         }}
                     >
-                        Navigate to MyPage to
+                        Navigate to MyPage curate a movie watch list.
                     </Typography>
                     <Typography
                         variant='body1'
