@@ -41,7 +41,7 @@ const MyPage = () => {
         callApiLoadDirectors().then((res) => {
           setDirectors(JSON.parse(res.express));
         })
-      }, [])
+      }, []);
     
     const callApiLoadDirectors = async () => {
         const url = "/api/getDirectors";
@@ -52,32 +52,32 @@ const MyPage = () => {
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
         return body;
-    }
+    };
 
     const onChangeMovie = (event) => { 
         setMovie(event.target.value);
         setMovieError(null);
-    }
+    };
 
     const onChangeDirector = (event) => { 
         setDirector(event.target.value);
         setMovieError(null);
-    }
+    };
 
     const onChangeGenre = (event) => { 
         setGenre(event.target.value);
         setMovieError(null);
-    }
+    };
 
     const onChangeGenreFilter = (event) => { 
         setGenreFilter(event.target.value);
         setShowList(false);
-    }
+    };
 
     const onChangeDirectorFilter = (event) => { 
         setDirectorFilter(event.target.value);
         setShowList(false);
-    }
+    };
 
     const callApiAddEntry = async () => {
         const url = "/api/addEntry";
@@ -94,7 +94,7 @@ const MyPage = () => {
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
         return body;
-    }
+    };
 
     const toggleList = () => {
         if (!showList) { 
@@ -110,7 +110,7 @@ const MyPage = () => {
             setDirectorFilter('');
             setGenreFilter('');
         }
-    }
+    };
     
     const callApiToggleList = async () => {
         const url = "/api/toggleList";
@@ -128,7 +128,7 @@ const MyPage = () => {
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
         return body;
-    }
+    };
 
     const handleSubmission = (event) => { 
         if (!movie) {
@@ -140,7 +140,7 @@ const MyPage = () => {
             setDirector('');
             setGenre('');
         }
-    }
+    };
 
     return (
         <Grid container spacing={5}>
@@ -224,7 +224,7 @@ const MyPage = () => {
                     <Typography
                         variant="body1"
                     >
-                        {movie} has been added to your watch list
+                        Entry has been added to watch list
                     </Typography>
                 }
             </Grid>
