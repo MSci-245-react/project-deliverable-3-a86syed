@@ -127,7 +127,7 @@ const Review = () => {
 
     <div>  
       <Grid container spacing={5}>
-        <AppBar position="static" sx={{height: '100px'}}>
+        <AppBar position="static" sx={{height: '100px', backgroundColor: '#388e3c'}}>
           <Container maxWidth="xl">
             <Toolbar sx={{ padding: '40px'}}>
             {pages.map((page) => (
@@ -218,8 +218,9 @@ const Review = () => {
           <Grid item xs={6} align="center"></Grid>}
           <Grid item xs={6} align = "center">
             <Button 
-            variant="contained"
-            onClick={handleClick}
+              variant="contained"
+              onClick={handleClick}
+              sx={{backgroundColor: '#388e3c'}}
             >
               Submit
             </Button>

@@ -72,7 +72,7 @@ const Search = () => {
     
     return (
         <Grid container spacing={5}>
-            <AppBar position="static" sx={{height: '100px'}}>
+            <AppBar position="static" sx={{height: '100px', backgroundColor: '#388e3c'}}>
                 <Container maxWidth="xl">
                     <Toolbar sx={{ padding: '40px'}}>
                     {pages.map((page) => (
@@ -119,6 +119,7 @@ const Search = () => {
                 <Button 
                     variant="contained"
                     onClick={handleSearch}
+                    sx={{backgroundColor: '#388e3c'}}
                 >
                     Submit
                 </Button>

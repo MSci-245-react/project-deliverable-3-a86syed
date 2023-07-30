@@ -33,7 +33,6 @@ app.post('/api/loadUserSettings', (req, res) => {
 		}
 
 		let string = JSON.stringify(results);
-		//let obj = JSON.parse(string);
 		res.send({ express: string });
 	});
 	connection.end();
@@ -75,7 +74,7 @@ app.post('/api/findMovie', (req, res) => {
 	let connection = mysql.createConnection(config);
 	let movieSearchTerm = req.body.movieSearchTerm;
 	let actorSearchTerm = req.body.actorSearchTerm;
-	let directorSearchTerm = req.body.actorSearchTerm;
+	let directorSearchTerm = req.body.directorSearchTerm;
 
 	let sql = `SELECT DISTINCT m.name AS movie_name, CONCAT(d.first_name, \' \', d.last_name) AS director_name, r.reviewContent AS review_content, r.reviewScore AS review_score
 				FROM movies AS m
@@ -83,24 +82,98 @@ app.post('/api/findMovie', (req, res) => {
 				INNER JOIN directors AS d ON md.director_id = d.id
 				INNER JOIN roles AS ro ON m.id = ro.movie_id
 				INNER JOIN actors AS a ON ro.actor_id = a.id
-				LEFT JOIN Review AS r ON m.id = r.movieID
-				WHERE`;
+				LEFT JOIN Review AS r ON m.id = r.movieID`;
 
 	let data = [];
 
 	if (movieSearchTerm){
-		sql += ` m.name = ?`;
+		sql += ` WHERE m.name = ?`;
 		data.push(movieSearchTerm);
 	}
 	if (actorSearchTerm){
-		if (data.length > 0) sql += ' AND';
-		sql += ` CONCAT(a.first_name, ' ', a.last_name) = ?`;
+		if (data.length > 0) {
+			sql += ' AND CONCAT(a.first_name, \' \', a.last_name) = ?';
+		} 
+		else {
+			sql += ` WHERE CONCAT(a.first_name, \' \', a.last_name) = ?`;
+		}
 		data.push(actorSearchTerm);
 	}
 	if (directorSearchTerm){
-		if (data.length > 0) sql += ' AND';
-		sql += ` CONCAT(d.first_name, ' ', d.last_name) = ?`;
+		if (data.length > 0) {
+			sql += ' AND CONCAT(d.first_name, \' \', d.last_name) = ?';
+		}
+		else {
+			sql += ` WHERE CONCAT(d.first_name, \' \', d.last_name) = ?`;
+		}
 		data.push(directorSearchTerm );
+	}
+
+	sql += ';';
+
+	connection.query(sql, data, (error, results, fields) => {
+		if (error) {
+			return console.error(error.message);
+		}
+
+		let string = JSON.stringify(results);
+		res.send({ express: string });
+	});
+	connection.end();
+
+});
+
+app.post('/api/addEntry', (req, res) => {
+    let movie_name = req.body.movie_name;
+    let director_name = req.body.director_name;
+    let genre = req.body.genre;
+
+    let sql = `INSERT INTO a86syed.watch_list(movie_name, director_name, genre) VALUES ("${movie_name}", "${director_name}", "${genre}");`
+    let connection = mysql.createConnection(config);
+
+    connection.query(sql, (error, results) => {
+        if (error) {
+            res.send(error);
+        }
+        res.send({express: JSON.stringify(results)});
+    });
+    connection.end();
+});
+
+app.post('/api/getDirectors', (req, res) => {
+	let sql = "SELECT DISTINCT director_name FROM watch_list";
+	let connection = mysql.createConnection(config); 
+
+	connection.query(sql, (error, results) => { 
+		if (error) { 
+			return console.error(error.message);
+		}
+		res.send({express : JSON.stringify(results)});
+	});
+	connection.end();
+});
+
+app.post('/api/toggleList', (req, res) => {
+	let connection = mysql.createConnection(config);
+    let director_name = req.body.director_name;
+    let genre = req.body.genre;
+
+	let sql = `SELECT movie_name, director_name FROM watch_list`;
+
+	let data = [];
+
+	if (director_name){
+		sql += ` WHERE director_name = ?`;
+		data.push(director_name);
+	}
+	if (genre){
+		if (data.length > 0) {
+			sql += ' AND genre = ?';
+		} 
+		else {
+			sql += ` WHERE genre = ?`;
+		}
+		data.push(genre);
 	}
 
 	sql += ';';
