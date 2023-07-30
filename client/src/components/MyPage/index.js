@@ -267,7 +267,7 @@ const MyPage = () => {
                     <Button 
                         variant="contained"
                         onClick={toggleList}
-                        sx={{backgroundColor: '#388e3c', margin: '15px'}}
+                        sx={{backgroundColor: '#9e9e9e', margin: '15px'}}
                         align = "right"
                     >
                         Hide Watch List

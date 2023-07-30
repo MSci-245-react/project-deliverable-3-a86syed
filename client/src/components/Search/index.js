@@ -121,7 +121,7 @@ const Search = () => {
                     onClick={handleSearch}
                     sx={{backgroundColor: '#388e3c'}}
                 >
-                    Submit
+                    Search
                 </Button>
             </Grid>
 
